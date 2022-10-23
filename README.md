@@ -1,2 +1,3 @@
 # aws-minecraft-infra
-マインクラフト環境
+
+AWS上にマインクラフト環境作るTerraform
