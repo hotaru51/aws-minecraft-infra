@@ -30,3 +30,10 @@ resource "aws_subnet" "mcs-subnet-c" {
   }
 }
 
+resource "aws_internet_gateway" "mcs-igw" {
+  vpc_id = aws_vpc.mcs-vpc.id
+
+  tags = {
+    Name = "${var.resource_name_prefix}-mcs-igw"
+  }
+}
