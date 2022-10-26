@@ -24,3 +24,8 @@ variable "public_subnet_a_cidr_block" {
 variable "public_subnet_c_cidr_block" {
   type = string
 }
+
+# minecraftサーバプロセスの待受ポート
+variable "mcs_listen_port" {
+  type = number
+}

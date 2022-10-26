@@ -12,3 +12,6 @@ public_subnet_a_cidr_block = "x.x.x.x/xx"
 
 # public subnet(c)のCIDR
 public_subnet_c_cidr_block = "x.x.x.x/xx"
+
+# minecraftサーバプロセスの待受ポート
+mcs_listen_port = xxxxx
