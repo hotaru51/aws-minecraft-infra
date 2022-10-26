@@ -9,14 +9,14 @@ data "aws_iam_policy_document" "mcs-ec2-assume-role-policy" {
   }
 }
 
-data "aws_iam_policy" "amazon-ssm-management-instance-core" {
+data "aws_iam_policy" "amazon-ssm-managed-instance-core" {
   arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_role" "mcs-ec2-role" {
   name                = "${var.resource_name_prefix}-mcs-ec2-role"
   assume_role_policy  = data.aws_iam_policy_document.mcs-ec2-assume-role-policy.json
-  managed_policy_arns = [data.aws_iam_policy.amazon-ssm-management-instance-core.arn]
+  managed_policy_arns = [data.aws_iam_policy.amazon-ssm-managed-instance-core.arn]
 
   tags = {
     Name = "${var.resource_name_prefix}-mcs-ec2-role"
