@@ -38,6 +38,20 @@ resource "aws_internet_gateway" "mcs-igw" {
   }
 }
 
+resource "aws_vpc_endpoint" "mcs-s3-endpoint" {
+  vpc_id            = aws_vpc.mcs-vpc.id
+  service_name      = "com.amazonaws.${var.region}.s3"
+  vpc_endpoint_type = "Gateway"
+
+  tags = {
+    Name = "${var.resource_name_prefix}-mcs-s3-endpoint"
+  }
+}
+
+data "aws_ec2_managed_prefix_list" "s3-prefix-list" {
+  name = "com.amazonaws.${var.region}.s3"
+}
+
 resource "aws_route_table" "mcs-public-rtb" {
   vpc_id = aws_vpc.mcs-vpc.id
 
@@ -49,6 +63,11 @@ resource "aws_route_table" "mcs-public-rtb" {
   tags = {
     Name = "${var.resource_name_prefix}-mcs-public-rtb"
   }
+}
+
+resource "aws_vpc_endpoint_route_table_association" "mcs-s3-endpoint-route" {
+  vpc_endpoint_id = aws_vpc_endpoint.mcs-s3-endpoint.id
+  route_table_id  = aws_route_table.mcs-public-rtb.id
 }
 
 resource "aws_route_table_association" "mcs-public-a-assoc" {
