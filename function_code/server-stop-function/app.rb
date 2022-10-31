@@ -2,7 +2,7 @@
 
 require 'json'
 
-def lambda_handler(event:)
+def lambda_handler(event:, context:)
   event_json = JSON.generate(event)
 
   { statusCode: 200, body: event_json }
