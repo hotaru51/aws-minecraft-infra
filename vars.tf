@@ -29,3 +29,19 @@ variable "public_subnet_c_cidr_block" {
 variable "mcs_listen_port" {
   type = number
 }
+
+# minecraftサーバのインスタンスタイプ
+variable "mcs_instance_type" {
+  type    = string
+  default = "t2.micro"
+}
+
+# minecraftサーバのAMI
+variable "mcs_ami_id" {
+  type = string
+}
+
+# minecraftサーバで使用するキーペア
+variable "mcs_keypair" {
+  type = string
+}
