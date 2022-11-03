@@ -5,6 +5,8 @@ resource "aws_lambda_function" "mcs-register-dns-record-function" {
   role             = aws_iam_role.mcs-function-role.arn
   handler          = "app.lambda_handler"
   runtime          = "ruby2.7"
+  timeout          = 10
+  memory_size      = 128
 }
 
 resource "aws_lambda_permission" "mcs-allow-instance-state-event" {
