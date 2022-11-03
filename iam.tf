@@ -79,12 +79,31 @@ resource "aws_iam_policy" "mcs-ec2-control-policy" {
   policy      = data.aws_iam_policy_document.mcs-ec2-control-policy-document.json
 }
 
+data "aws_iam_policy_document" "mcs-hosted-zone-policy-document" {
+  statement {
+    actions = [
+      "route53:ChangeResourceRecordSets"
+    ]
+
+    resources = [
+      aws_route53_zone.mcs-public-hosted-zone.arn
+    ]
+  }
+}
+
+resource "aws_iam_policy" "mcs-hosted-zone-policy" {
+  name        = "${var.resource_name_prefix}-mcs-hosted-zone-policy"
+  description = "${var.resource_name_prefix}-mcs-hosted-zone-policy"
+  policy      = data.aws_iam_policy_document.mcs-hosted-zone-policy-document.json
+}
+
 resource "aws_iam_role" "mcs-function-role" {
   name               = "${var.resource_name_prefix}-mcs-function-role"
   assume_role_policy = data.aws_iam_policy_document.mcs-function-assume-role-policy.json
   managed_policy_arns = [
     aws_iam_policy.mcs-lambda-basic-execution-policy.arn,
-    aws_iam_policy.mcs-ec2-control-policy.arn
+    aws_iam_policy.mcs-ec2-control-policy.arn,
+    aws_iam_policy.mcs-hosted-zone-policy.arn
   ]
 
   tags = {
