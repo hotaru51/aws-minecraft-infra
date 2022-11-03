@@ -50,3 +50,8 @@ variable "mcs_keypair" {
 variable "dns_record_prefix" {
   type = string
 }
+
+# パブリックホストゾーンID
+variable "public_hosted_zone_id" {
+  type = string
+}

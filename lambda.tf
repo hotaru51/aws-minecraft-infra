@@ -7,6 +7,12 @@ resource "aws_lambda_function" "mcs-register-dns-record-function" {
   runtime          = "ruby2.7"
   timeout          = 10
   memory_size      = 128
+
+  environment {
+    variables = {
+      PUBLIC_HOSTED_ZONE_ID = var.public_hosted_zone_id
+    }
+  }
 }
 
 resource "aws_lambda_permission" "mcs-allow-instance-state-event" {

@@ -27,3 +27,6 @@ mcs_keypair = "xxx"
 
 # DNSレコードに使用されるprefix
 dns_record_prefix = "xxx"
+
+# パブリックホストゾーンID
+public_hosted_zone_id = "xxx"
