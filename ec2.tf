@@ -13,6 +13,7 @@ resource "aws_instance" "mcs-instance" {
   }
 
   tags = {
-    Name = "${var.resource_name_prefix}-mcs-sv-01a"
+    Name   = "${var.resource_name_prefix}-mcs-sv-01a"
+    Record = var.dns_record_prefix
   }
 }

@@ -24,3 +24,6 @@ mcs_ami_id = "ami-xxxxxxxxxxxxxxxxx"
 
 # minecraftサーバで使用するキーペア
 mcs_keypair = "xxx"
+
+# DNSレコードに使用されるprefix
+dns_record_prefix = "xxx"

@@ -45,3 +45,8 @@ variable "mcs_ami_id" {
 variable "mcs_keypair" {
   type = string
 }
+
+# DNSレコードに使用されるprefix
+variable "dns_record_prefix" {
+  type = string
+}
