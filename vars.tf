@@ -51,7 +51,7 @@ variable "dns_record_prefix" {
   type = string
 }
 
-# パブリックホストゾーンID
-variable "public_hosted_zone_id" {
+# ホストゾーン名
+variable "public_hosted_zone_name" {
   type = string
 }
