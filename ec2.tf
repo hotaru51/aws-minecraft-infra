@@ -4,7 +4,7 @@ resource "aws_instance" "mcs-instance" {
   iam_instance_profile        = aws_iam_instance_profile.mcs-ec2-instance-profile.name
   instance_type               = var.mcs_instance_type
   key_name                    = var.mcs_keypair
-  security_groups             = [aws_security_group.mcs-instance-sg.id]
+  vpc_security_group_ids      = [aws_security_group.mcs-instance-sg.id]
   subnet_id                   = aws_subnet.mcs-subnet-a.id
 
   root_block_device {
