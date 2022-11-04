@@ -5,6 +5,15 @@ resource "aws_lambda_function" "mcs-register-dns-record-function" {
   role             = aws_iam_role.mcs-function-role.arn
   handler          = "app.lambda_handler"
   runtime          = "ruby2.7"
+  timeout          = 10
+  memory_size      = 128
+
+  environment {
+    variables = {
+      PUBLIC_HOSTED_ZONE_ID = aws_route53_zone.mcs-public-hosted-zone.id
+      PUBLIC_HOSTED_ZONE_NAME = aws_route53_zone.mcs-public-hosted-zone.name
+    }
+  }
 }
 
 resource "aws_lambda_permission" "mcs-allow-instance-state-event" {
