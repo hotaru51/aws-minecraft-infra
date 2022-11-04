@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'logger'
+require 'json'
 require 'aws-sdk'
 
 class DnsRecordManager
@@ -39,11 +40,42 @@ class DnsRecordManager
 
     # レコードの削除
     @logger.info('delete DNS record.')
-    @client.change_resource_record_sets({
-      change_batch: {
-        changes: changes_arr
-      },
-      hosted_zone_id: @zone_id
-    })
+    @client.change_resource_record_sets(
+      {
+        change_batch: {
+          changes: changes_arr
+        },
+        hosted_zone_id: @zone_id
+      }
+    )
+  end
+
+  # レコードの追加
+  def register_dns_record(record_name, public_ip_address)
+    # change_batch[:changes]に渡すオブジェクトの作成
+    changes_arr = [
+      {
+        action: 'UPSERT',
+        resource_record_set: {
+          name: "#{record_name}.#{@zone_name}",
+          resource_records: [
+            { value: public_ip_address }
+          ],
+          ttl: 60,
+          type: 'A'
+        }
+      }
+    ]
+
+    # レコード作成
+    @logger.info("create dns record: record: #{JSON.generate(changes_arr)}")
+    @client.change_resource_record_sets(
+      {
+        change_batch: {
+          changes: changes_arr
+        },
+        hosted_zone_id: @zone_id
+      }
+    )
   end
 end

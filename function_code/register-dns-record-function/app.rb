@@ -40,6 +40,7 @@ def lambda_handler(event:, context:)
   end
 
   record_tag_value = record_tags[0][:value]
+  public_ip_address = instance_detail[:public_ip_address]
   state = event['detail']['state']
   dns_record_manger = DnsRecordManager.new
   case state
@@ -48,7 +49,7 @@ def lambda_handler(event:, context:)
     dns_record_manger.delete_dns_record(record_tag_value)
   when 'running'
     # レコード登録
-    logger.info('register DNS record.')
+    dns_record_manger.register_dns_record(record_tag_value, public_ip_address)
   else
     logger.info("invalid record: #{state}")
     return { statusCode: 200, body: 'do noting.' }
