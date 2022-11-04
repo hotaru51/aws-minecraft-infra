@@ -82,7 +82,8 @@ resource "aws_iam_policy" "mcs-ec2-control-policy" {
 data "aws_iam_policy_document" "mcs-hosted-zone-policy-document" {
   statement {
     actions = [
-      "route53:ChangeResourceRecordSets"
+      "route53:ChangeResourceRecordSets",
+      "route53:ListResourceRecordSets"
     ]
 
     resources = [
