@@ -11,6 +11,7 @@ resource "aws_lambda_function" "mcs-register-dns-record-function" {
   environment {
     variables = {
       PUBLIC_HOSTED_ZONE_ID = aws_route53_zone.mcs-public-hosted-zone.id
+      PUBLIC_HOSTED_ZONE_NAME = aws_route53_zone.mcs-public-hosted-zone.name
     }
   }
 }
