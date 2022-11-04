@@ -6,7 +6,10 @@ require 'aws-sdk'
 
 # 対象インスタンスの詳細を取得する
 def get_instance_detail(instance_id)
+  logger = Logger.new(STDOUT)
+
   client = Aws::EC2::Client.new
+  logger.info("get instance detail: instance_id = #{instance_id}")
   res = client.describe_instances({ instance_ids: [instance_id] })
   instance = res.reservations[0].instances[0]
 
@@ -25,7 +28,7 @@ def lambda_handler(event:, context:)
   # eventから対象インスタンスID取得
   instance_id = event['detail']['instance-id']
   instance_detail = get_instance_detail(instance_id)
-  logger.info("target instance detail: #{instance_detail}")
+  logger.info("target instance detail: #{JSON.generate(instance_detail)}")
 
   # Recordがない場合は終了
   record_tags = instance_detail[:tags].filter { |item| item[:key] == 'Record' }
