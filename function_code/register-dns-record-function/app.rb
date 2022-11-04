@@ -45,11 +45,7 @@ def lambda_handler(event:, context:)
   case state
   when 'stopping'
     # レコード削除
-    if dns_record_manger.exists_dns_record?(record_tag_value)
-      logger.info('delete DNS record.')
-    else
-      logger.info('target record not found. do nothing.')
-    end
+    dns_record_manger.delete_dns_record(record_tag_value)
   when 'running'
     # レコード登録
     logger.info('register DNS record.')
