@@ -4,6 +4,8 @@ require 'logger'
 require 'json'
 require 'aws-sdk'
 
+require_relative 'lib/dns_record_manger'
+
 # 対象インスタンスの詳細を取得する
 def get_instance_detail(instance_id)
   logger = Logger.new(STDOUT)
@@ -17,27 +19,6 @@ def get_instance_detail(instance_id)
     "public_ip_address": instance[:public_ip_address],
     "tags": instance[:tags]
   }
-end
-
-# レコードの存在確認
-def exists_dns_record?(record_name)
-  logger = Logger.new(STDOUT)
-
-  client = Aws::Route53::Client.new
-  zone_id = ENV['PUBLIC_HOSTED_ZONE_ID']
-  zone_name = ENV['PUBLIC_HOSTED_ZONE_NAME']
-  target_record_name = "#{record_name}.#{zone_name}."
-
-  # ホストゾーンのレコード一覧取得
-  logger.info("get record list: zone_id = #{zone_id}")
-  records = client.list_resource_record_sets({ hosted_zone_id: zone_id })
-
-  filtered = records['resource_record_sets'].filter do |item|
-    item['name'] == target_record_name && item['type'] == 'A'
-  end
-  logger.info("filtered record length: #{filtered.length}")
-
-  filtered.length >= 1
 end
 
 def lambda_handler(event:, context:)
@@ -60,12 +41,15 @@ def lambda_handler(event:, context:)
 
   record_tag_value = record_tags[0][:value]
   state = event['detail']['state']
+  dns_record_manger = DnsRecordManager.new
   case state
   when 'stopping'
     # レコード削除
-    logger.info('delete DNS record.')
-
-    p exists_dns_record?(record_tag_value)
+    if dns_record_manger.exists_dns_record?(record_tag_value)
+      logger.info('delete DNS record.')
+    else
+      logger.info('target record not found. do nothing.')
+    end
   when 'running'
     # レコード登録
     logger.info('register DNS record.')
