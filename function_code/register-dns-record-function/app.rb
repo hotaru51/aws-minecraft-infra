@@ -51,7 +51,7 @@ def lambda_handler(event:, context:)
     # レコード登録
     dns_record_manger.register_dns_record(record_tag_value, public_ip_address)
   else
-    logger.info("invalid record: #{state}")
+    logger.info("invalid state: #{state}")
     return { statusCode: 200, body: 'do noting.' }
   end
 
