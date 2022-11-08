@@ -37,6 +37,7 @@ resource "aws_lambda_function" "mcs-instance-start-stop-function" {
   environment {
     variables = {
       TOKEN_PARAMETER_NAME = data.aws_ssm_parameter.mcs-token-parameter.name
+      TARGET_INSTANCE      = aws_instance.mcs-instance.id
     }
   }
 }
