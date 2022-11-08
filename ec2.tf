@@ -16,4 +16,10 @@ resource "aws_instance" "mcs-instance" {
     Name   = "${var.resource_name_prefix}-mcs-sv-01a"
     Record = var.dns_record_prefix
   }
+
+  depends_on = [
+    aws_lambda_function.mcs-register-dns-record-function,
+    aws_cloudwatch_event_target.mcs-instance-state-event-target,
+    aws_cloudwatch_event_rule.mcs-instance-state-event
+  ]
 }
