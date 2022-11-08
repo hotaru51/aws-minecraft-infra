@@ -55,3 +55,8 @@ variable "dns_record_prefix" {
 variable "public_hosted_zone_name" {
   type = string
 }
+
+# インスタンス起動/停止Lambdaで使用するトークン格納用Parameter名
+variable "token_parameter_name" {
+  type = string
+}

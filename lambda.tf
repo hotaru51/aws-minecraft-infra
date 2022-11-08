@@ -33,6 +33,12 @@ resource "aws_lambda_function" "mcs-instance-start-stop-function" {
   runtime          = "ruby2.7"
   timeout          = 10
   memory_size      = 128
+
+  environment {
+    variables = {
+      TOKEN_PARAMETER_NAME = data.aws_ssm_parameter.mcs-token-parameter.name
+    }
+  }
 }
 
 resource "aws_lambda_function_url" "mcs-instance-start-stop-function-url" {
