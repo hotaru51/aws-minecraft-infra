@@ -12,7 +12,7 @@ class DnsRecordManager
     @zone_name = ENV['PUBLIC_HOSTED_ZONE_NAME']
   end
 
-# レコードの存在確認
+  # 対象のDNSレコードを取得する
   def get_target_dns_record(record_name)
     # ホストゾーンのレコード一覧取得
     @logger.info("get record list: zone_id = #{@zone_id}")
