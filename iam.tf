@@ -98,13 +98,32 @@ resource "aws_iam_policy" "mcs-hosted-zone-policy" {
   policy      = data.aws_iam_policy_document.mcs-hosted-zone-policy-document.json
 }
 
+data "aws_iam_policy_document" "mcs-ssm-parameter-policy-document" {
+  statement {
+    actions = [
+      "ssm:GetParameter"
+    ]
+
+    resources = [
+      data.aws_ssm_parameter.mcs-token-parameter.arn
+    ]
+  }
+}
+
+resource "aws_iam_policy" "mcs-ssm-parameter-policy" {
+  name        = "${var.resource_name_prefix}-mcs-ssm-parameter-policy"
+  description = "${var.resource_name_prefix}-mcs-ssm-parameter-policy"
+  policy      = data.aws_iam_policy_document.mcs-ssm-parameter-policy-document.json
+}
+
 resource "aws_iam_role" "mcs-function-role" {
   name               = "${var.resource_name_prefix}-mcs-function-role"
   assume_role_policy = data.aws_iam_policy_document.mcs-function-assume-role-policy.json
   managed_policy_arns = [
     aws_iam_policy.mcs-lambda-basic-execution-policy.arn,
     aws_iam_policy.mcs-ec2-control-policy.arn,
-    aws_iam_policy.mcs-hosted-zone-policy.arn
+    aws_iam_policy.mcs-hosted-zone-policy.arn,
+    aws_iam_policy.mcs-ssm-parameter-policy.arn
   ]
 
   tags = {
