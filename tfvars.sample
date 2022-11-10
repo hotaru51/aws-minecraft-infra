@@ -30,3 +30,6 @@ dns_record_prefix = "xxx"
 
 # パブリックホストゾーン名
 public_hosted_zone_name = "aaa.example.com"
+
+# インスタンス起動/停止Lambdaで使用するトークン格納用Parameter名
+token_parameter_name = "xxx"
