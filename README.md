@@ -2,7 +2,7 @@
 
 AWS上にマインクラフト環境作るTerraform
 
-## 構築予定図
+## 構成図
 
 ![構成図](doc/infra.drawio.png)
 
