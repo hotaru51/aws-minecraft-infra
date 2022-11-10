@@ -13,10 +13,35 @@ data "aws_iam_policy" "amazon-ssm-managed-instance-core" {
   arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
+data "aws_iam_policy_document" "mcs-s3-access-policy-document" {
+  statement {
+    actions = [
+      "s3:ListBucket",
+      "s3:GetObject*",
+      "s3:PutObject",
+      "s3:DeleteObject"
+    ]
+
+    resources = [
+      aws_s3_bucket.mcs-data-bucket.arn,
+      "${aws_s3_bucket.mcs-data-bucket.arn}/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "mcs-s3-access-policy" {
+  name        = "${var.resource_name_prefix}-mcs-s3-access-policy"
+  description = "${var.resource_name_prefix}-mcs-s3-access-policy"
+  policy      = data.aws_iam_policy_document.mcs-s3-access-policy-document.json
+}
+
 resource "aws_iam_role" "mcs-ec2-role" {
-  name                = "${var.resource_name_prefix}-mcs-ec2-role"
-  assume_role_policy  = data.aws_iam_policy_document.mcs-ec2-assume-role-policy.json
-  managed_policy_arns = [data.aws_iam_policy.amazon-ssm-managed-instance-core.arn]
+  name               = "${var.resource_name_prefix}-mcs-ec2-role"
+  assume_role_policy = data.aws_iam_policy_document.mcs-ec2-assume-role-policy.json
+  managed_policy_arns = [
+    data.aws_iam_policy.amazon-ssm-managed-instance-core.arn,
+    aws_iam_policy.mcs-s3-access-policy.arn
+  ]
 
   tags = {
     Name = "${var.resource_name_prefix}-mcs-ec2-role"
