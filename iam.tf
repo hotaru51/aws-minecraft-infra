@@ -155,3 +155,41 @@ resource "aws_iam_role" "mcs-function-role" {
     Name = "${var.resource_name_prefix}-mcs-function-role"
   }
 }
+
+data "aws_caller_identity" "current" {}
+
+data "aws_iam_policy_document" "mcs-ssm-assume-role-policy-document" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ssm.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values = [
+        data.aws_caller_identity.current.account_id
+      ]
+    }
+
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values = [
+        "arn:aws:ssm:*:${data.aws_caller_identity.current.account_id}:automation-execution/*"
+      ]
+    }
+  }
+}
+
+resource "aws_iam_role" "mcs-ssm-automation-role" {
+  name               = "${var.resource_name_prefix}-mcs-ssm-automation-role"
+  assume_role_policy = data.aws_iam_policy_document.mcs-ssm-assume-role-policy-document.json
+
+  tags = {
+    Name = "${var.resource_name_prefix}-mcs-ssm-automation-role"
+  }
+}
