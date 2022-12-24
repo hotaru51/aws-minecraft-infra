@@ -185,6 +185,32 @@ data "aws_iam_policy_document" "mcs-ssm-assume-role-policy-document" {
   }
 }
 
+data "aws_iam_policy" "amazon-ssm-automation-role" {
+  arn = "arn:aws:iam::aws:policy/service-role/AmazonSSMAutomationRole"
+}
+
+data "aws_iam_policy_document" "mcs-pass-role-policy-document" {
+  statement {
+    actions   = ["iam:PassRole"]
+    resources = [aws_iam_role.mcs-ssm-automation-role.arn]
+  }
+}
+
+resource "aws_iam_policy" "mcs-pass-role-policy" {
+  name        = "${var.resource_name_prefix}-mcs-pass-role-policy"
+  description = "${var.resource_name_prefix}-mcs-pass-role-policy"
+  policy      = data.aws_iam_policy_document.mcs-pass-role-policy-document.json
+}
+
+resource "aws_iam_role_policy_attachment" "mcs-pass-role-policy-attachment" {
+  for_each = {
+    pass_role_policy    = aws_iam_policy.mcs-pass-role-policy.arn
+    ssm_automation_role = data.aws_iam_policy.amazon-ssm-automation-role.arn
+  }
+  role       = aws_iam_role.mcs-ssm-automation-role.name
+  policy_arn = each.value
+}
+
 resource "aws_iam_role" "mcs-ssm-automation-role" {
   name               = "${var.resource_name_prefix}-mcs-ssm-automation-role"
   assume_role_policy = data.aws_iam_policy_document.mcs-ssm-assume-role-policy-document.json
