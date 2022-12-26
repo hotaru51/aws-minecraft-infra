@@ -199,6 +199,21 @@ resource "aws_iam_role" "mcs-ssm-automation-role" {
   }
 }
 
+data "aws_iam_policy_document" "mcs-mw-assume-role-policy-document" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ssm.amazonaws.com"]
+    }
+  }
+}
+
+data "aws_iam_policy" "amazon-ssm-maintenance-window-role" {
+  arn = "arn:aws:iam::aws:policy/service-role/AmazonSSMMaintenanceWindowRole"
+}
+
 data "aws_iam_policy_document" "mcs-pass-role-policy-document" {
   statement {
     actions   = ["iam:PassRole"]
@@ -206,9 +221,16 @@ data "aws_iam_policy_document" "mcs-pass-role-policy-document" {
   }
 }
 
-resource "aws_iam_policy" "mcs-pass-role-policy" {
-  name        = "${var.resource_name_prefix}-mcs-pass-role-policy"
-  description = "${var.resource_name_prefix}-mcs-pass-role-policy"
-  policy      = data.aws_iam_policy_document.mcs-pass-role-policy-document.json
-}
+resource "aws_iam_role" "mcs-ssm-maintenance-window-role" {
+  name                = "${var.resource_name_prefix}-mcs-ssm-maintenance-window-role"
+  assume_role_policy  = data.aws_iam_policy_document.mcs-mw-assume-role-policy-document.json
+  managed_policy_arns = [data.aws_iam_policy.amazon-ssm-maintenance-window-role.arn]
+  inline_policy {
+    name   = "automation-passrole"
+    policy = data.aws_iam_policy_document.mcs-pass-role-policy-document.json
+  }
 
+  tags = {
+    Name : "${var.resource_name_prefix}-mcs-ssm-maintenance-window-role"
+  }
+}
