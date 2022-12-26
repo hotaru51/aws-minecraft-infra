@@ -19,3 +19,34 @@ resource "aws_ssm_maintenance_window_target" "mcs-maintenance-window-target" {
     values = [var.resource_name_prefix]
   }
 }
+
+resource "aws_ssm_maintenance_window_task" "mcs-maintenance-window-task" {
+  name             = "stop-minecraft-server"
+  task_type        = "AUTOMATION"
+  task_arn         = "AWS-StopEC2Instance"
+  window_id        = aws_ssm_maintenance_window.mcs-maintenance-window.id
+  service_role_arn = aws_iam_role.mcs-ssm-maintenance-window-role.arn
+  priority         = 1
+  max_concurrency  = "100%"
+  max_errors       = "100%"
+
+  targets {
+    key    = "WindowTargetIds"
+    values = [aws_ssm_maintenance_window_target.mcs-maintenance-window-target.id]
+  }
+
+  task_invocation_parameters {
+    automation_parameters {
+      document_version = "$DEFAULT"
+      parameter {
+        name   = "InstanceId"
+        values = ["{{TARGET_ID}}"]
+      }
+
+      parameter {
+        name   = "AutomationAssumeRole"
+        values = [aws_iam_role.mcs-ssm-automation-role.arn]
+      }
+    }
+  }
+}
