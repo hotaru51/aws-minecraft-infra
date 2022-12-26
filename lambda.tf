@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "mcs-register-dns-record-function" {
   filename         = "function_code/register-dns-record-function.zip"
-  source_code_hash = "function_code/register-dns-record-function.zip"
+  source_code_hash = filebase64sha256("function_code/register-dns-record-function.zip")
   function_name    = "${var.resource_name_prefix}-mcs-register-dns-record-function"
   role             = aws_iam_role.mcs-function-role.arn
   handler          = "app.lambda_handler"
@@ -26,7 +26,7 @@ resource "aws_lambda_permission" "mcs-allow-instance-state-event" {
 
 resource "aws_lambda_function" "mcs-instance-start-stop-function" {
   filename         = "function_code/instance-start-stop-function.zip"
-  source_code_hash = "function_code/instance-start-stop-function.zip"
+  source_code_hash = filebase64sha256("function_code/instance-start-stop-function.zip")
   function_name    = "${var.resource_name_prefix}-mcs-instance-start-stop-function"
   role             = aws_iam_role.mcs-function-role.arn
   handler          = "app.lambda_handler"
