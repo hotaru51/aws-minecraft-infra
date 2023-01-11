@@ -38,16 +38,23 @@ def lambda_handler(event:, context:)
 
   target_instance = ENV['TARGET_INSTANCE']
   ec2_instance = Aws::EC2::Instance.new({ id: target_instance })
+  ret_body = {}
   case request.path
   when '/start'
     # インスタンス起動
     logger.info("start instance. (#{target_instance})")
-    ec2_instance.start
+    res = ec2_instance.start.starting_instances[0]
+    ret_body[:message] = 'ok(開始)'
+    ret_body[:state] = res[:current_state][:name]
+    ret_body[:instance_id] = res[:instance_id]
   when '/stop'
     logger.info("stop instance. (#{target_instance})")
     # インスタンス停止
-    ec2_instance.stop
+    res = ec2_instance.stop.stopping_instances[0]
+    ret_body[:message] = 'ok(停止)'
+    ret_body[:state] = res[:current_state][:name]
+    ret_body[:instance_id] = res[:instance_id]
   end
 
-  { statusCode: 200, body: 'ok' }
+  { statusCode: 200, body: ret_body }
 end
