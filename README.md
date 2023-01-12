@@ -19,8 +19,13 @@ AWS上にマインクラフト環境作るTerraform
 
 * `backend.tf.sample` をコピーし、作成したtfstate用のバケット名を指定する
 * `tfvars.sample` を適当な名前でコピーし、値を設定する
-* `funtion_code/*/` 配下のLambdaのコードをzipで固め、 `funtion_code/<ディレクトリ名>.zip` となるように配置
-    * Makefile作成予定
+* 下記コマンドでLambdaをビルドする
+
+```sh
+cd function_code
+make
+```
+
 * 下記コマンドでデプロイ
 
 ```sh
