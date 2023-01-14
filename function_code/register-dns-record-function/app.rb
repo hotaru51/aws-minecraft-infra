@@ -44,7 +44,7 @@ def lambda_handler(event:, context:)
   state = event['detail']['state']
   dns_record_manger = DnsRecordManager.new
   case state
-  when 'stopping'
+  when 'stopping', 'shutting-down'
     # レコード削除
     dns_record_manger.delete_dns_record(record_tag_value)
   when 'running'
