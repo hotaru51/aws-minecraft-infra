@@ -10,6 +10,12 @@ variable "resource_name_prefix" {
   default = "htr"
 }
 
+# コスト分配タグの値
+variable "cost_allocation_tag_value" {
+  type    = string
+  default = "htr"
+}
+
 # VPCのCIDR
 variable "vpc_cidr_block" {
   type = string

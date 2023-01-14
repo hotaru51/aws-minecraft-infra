@@ -10,6 +10,11 @@ resource "aws_instance" "mcs-instance" {
   root_block_device {
     volume_size = 16
     volume_type = "gp3"
+
+    tags = {
+      Name      = "${var.resource_name_prefix}-mcs-sv-01a"
+      CostGroup = var.cost_allocation_tag_value
+    }
   }
 
   tags = {
