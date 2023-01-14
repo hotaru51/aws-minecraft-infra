@@ -1,3 +1,8 @@
+# minecraftサーバインスタンスID
+output "mcs-instance-id" {
+  value = aws_instance.mcs-instance.id
+}
+
 # minecraftサーバ用のIAMロール
 output "mcs-iam-name" {
   value = aws_iam_role.mcs-ec2-role.name
