@@ -6,7 +6,7 @@ resource "aws_cloudwatch_event_rule" "mcs-instance-state-event" {
   "source": ["aws.ec2"],
   "detail-type": ["EC2 Instance State-change Notification"],
   "detail": {
-    "state": ["stopping", "running"]
+    "state": ["stopping", "running", "shutting-down"]
   }
 }
 EOF
