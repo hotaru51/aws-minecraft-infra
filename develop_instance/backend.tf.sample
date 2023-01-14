@@ -1,0 +1,19 @@
+# vim: filetype=terraform
+
+terraform {
+  backend "s3" {
+    bucket = "backend-bucket-name"
+    region = "ap-northeast-1"
+    key    = "dev_instance.tfstate"
+  }
+}
+
+data "terraform_remote_state" "mcs" {
+  backend = "s3"
+
+  config = {
+    bucket = "backend-bucket-name"
+    region = "ap-northeast-1"
+    key    = "terraform.tfstate"
+  }
+}
