@@ -5,8 +5,8 @@ resource "aws_lambda_function" "mcs-register-dns-record-function" {
   role             = aws_iam_role.mcs-function-role.arn
   handler          = "app.lambda_handler"
   runtime          = "ruby2.7"
-  timeout          = 10
-  memory_size      = 128
+  timeout          = 15
+  memory_size      = 256
 
   environment {
     variables = {
@@ -31,8 +31,8 @@ resource "aws_lambda_function" "mcs-instance-start-stop-function" {
   role             = aws_iam_role.mcs-function-role.arn
   handler          = "app.lambda_handler"
   runtime          = "ruby2.7"
-  timeout          = 10
-  memory_size      = 128
+  timeout          = 15
+  memory_size      = 256
 
   environment {
     variables = {
