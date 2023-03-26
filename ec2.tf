@@ -23,6 +23,13 @@ resource "aws_instance" "mcs-instance" {
     InstanceGroup = "${var.resource_name_prefix}"
   }
 
+  # 負荷に応じて手動でインスタンスタイプを変更できるように無視
+  lifecycle {
+    ignore_changes = [
+      instance_type
+    ]
+  }
+
   depends_on = [
     aws_lambda_function.mcs-register-dns-record-function,
     aws_cloudwatch_event_target.mcs-instance-state-event-target,
