@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "mcs-ec2-assume-role-policy" {
 }
 
 data "aws_iam_policy" "amazon-ssm-managed-instance-core" {
-  arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  name = "AmazonSSMManagedInstanceCore"
 }
 
 data "aws_iam_policy_document" "mcs-s3-access-policy-document" {
