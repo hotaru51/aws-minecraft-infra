@@ -9,7 +9,7 @@ resource "aws_instance" "mcs-instance" {
   user_data                   = templatefile("${path.module}/userdata.sh.tftpl", { parameter_name = aws_ssm_parameter.mcs-cwagent.name })
 
   root_block_device {
-    volume_size = 16
+    volume_size = 8
     volume_type = "gp3"
 
     tags = {
