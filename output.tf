@@ -17,3 +17,8 @@ output "mcs-sg-id" {
 output "mcs-subnet-a-id" {
   value = aws_subnet.mcs-subnet-a.id
 }
+
+# CWAgent設定用のParameter store
+output "mcs-cwagent-parameter-name" {
+  value = aws_ssm_parameter.mcs-cwagent.name
+}

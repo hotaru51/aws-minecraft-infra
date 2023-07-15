@@ -7,3 +7,8 @@ resource "aws_cloudwatch_log_group" "mcs-instance-start-stop-function-log" {
   name              = "/aws/lambda/${var.resource_name_prefix}-mcs-instance-start-stop-function"
   retention_in_days = 30
 }
+
+resource "aws_cloudwatch_log_group" "mcs-mc-server-log" {
+  name              = "/aws/ec2/${var.resource_name_prefix}-mcs-mc-server"
+  retention_in_days = 30
+}

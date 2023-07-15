@@ -6,9 +6,10 @@ resource "aws_instance" "mcs-instance" {
   key_name                    = var.mcs_keypair
   vpc_security_group_ids      = [aws_security_group.mcs-instance-sg.id]
   subnet_id                   = aws_subnet.mcs-subnet-a.id
+  user_data                   = templatefile("${path.module}/userdata.sh.tftpl", { parameter_name = aws_ssm_parameter.mcs-cwagent.name })
 
   root_block_device {
-    volume_size = 16
+    volume_size = 8
     volume_type = "gp3"
 
     tags = {
@@ -33,6 +34,8 @@ resource "aws_instance" "mcs-instance" {
   depends_on = [
     aws_lambda_function.mcs-register-dns-record-function,
     aws_cloudwatch_event_target.mcs-instance-state-event-target,
-    aws_cloudwatch_event_rule.mcs-instance-state-event
+    aws_cloudwatch_event_rule.mcs-instance-state-event,
+    aws_cloudwatch_log_group.mcs-mc-server-log,
+    aws_ssm_parameter.mcs-cwagent
   ]
 }

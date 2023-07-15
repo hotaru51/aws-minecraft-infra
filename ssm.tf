@@ -2,6 +2,29 @@ data "aws_ssm_parameter" "mcs-token-parameter" {
   name = var.token_parameter_name
 }
 
+resource "aws_ssm_parameter" "mcs-cwagent" {
+  name = "AmazonCloudWatch-${var.resource_name_prefix}-mcs-cwagent-config"
+  type = "String"
+  value = jsonencode({
+    agent = {
+      run_as_user = "root"
+    }
+    logs = {
+      logs_collected = {
+        files = {
+          collect_list = [
+            {
+              file_path       = "/var/log/minecraft/minecraft.log"
+              log_group_name  = aws_cloudwatch_log_group.mcs-mc-server-log.name
+              log_stream_name = "{instance_id}"
+            }
+          ]
+        }
+      }
+    }
+  })
+}
+
 resource "aws_ssm_maintenance_window" "mcs-maintenance-window" {
   name              = "${var.resource_name_prefix}-mcs-daily-instance-stop"
   schedule          = "cron(0 2 * * ? *)"

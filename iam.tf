@@ -10,7 +10,11 @@ data "aws_iam_policy_document" "mcs-ec2-assume-role-policy" {
 }
 
 data "aws_iam_policy" "amazon-ssm-managed-instance-core" {
-  arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  name = "AmazonSSMManagedInstanceCore"
+}
+
+data "aws_iam_policy" "cloudwatch-agent-server-policy" {
+  name = "CloudWatchAgentServerPolicy"
 }
 
 data "aws_iam_policy_document" "mcs-s3-access-policy-document" {
@@ -40,6 +44,7 @@ resource "aws_iam_role" "mcs-ec2-role" {
   assume_role_policy = data.aws_iam_policy_document.mcs-ec2-assume-role-policy.json
   managed_policy_arns = [
     data.aws_iam_policy.amazon-ssm-managed-instance-core.arn,
+    data.aws_iam_policy.cloudwatch-agent-server-policy.arn,
     aws_iam_policy.mcs-s3-access-policy.arn
   ]
 
