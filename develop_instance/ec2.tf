@@ -1,3 +1,4 @@
+# TODO: パブリックパラメータがあるので、そのうちParameter storeから取得するように変更する
 data "aws_ami" "ubuntu" {
   most_recent = true
 
@@ -35,6 +36,7 @@ resource "aws_instance" "mcs-dev-instance" {
   key_name                    = var.mcs_keypair
   vpc_security_group_ids      = [data.terraform_remote_state.mcs.outputs.mcs-sg-id]
   subnet_id                   = data.terraform_remote_state.mcs.outputs.mcs-subnet-a-id
+  user_data                   = templatefile("${path.module}/../userdata.sh.tftpl", { parameter_name = data.terraform_remote_state.mcs.outputs.mcs-cwagent-parameter-name })
 
   root_block_device {
     volume_size = var.dev_ami_id == null ? 8 : 16 # TODO:初回は16GBで作ってしまったので念のため分岐
