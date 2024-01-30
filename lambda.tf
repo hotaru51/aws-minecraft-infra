@@ -4,7 +4,7 @@ resource "aws_lambda_function" "mcs-register-dns-record-function" {
   function_name    = "${var.resource_name_prefix}-mcs-register-dns-record-function"
   role             = aws_iam_role.mcs-function-role.arn
   handler          = "app.lambda_handler"
-  runtime          = "ruby2.7"
+  runtime          = "ruby3.2"
   timeout          = 15
   memory_size      = 256
 
@@ -30,7 +30,7 @@ resource "aws_lambda_function" "mcs-instance-start-stop-function" {
   function_name    = "${var.resource_name_prefix}-mcs-instance-start-stop-function"
   role             = aws_iam_role.mcs-function-role.arn
   handler          = "app.lambda_handler"
-  runtime          = "ruby2.7"
+  runtime          = "ruby3.2"
   timeout          = 15
   memory_size      = 256
 
