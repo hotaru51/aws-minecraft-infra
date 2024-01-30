@@ -17,7 +17,7 @@ AWS上にマインクラフト環境作るTerraform
 
 ### 手順
 
-* `backend.tf.sample` をコピーし、作成したtfstate用のバケット名を指定する
+* `backend_config/sample.tf` をコピーし、作成したtfstate用のバケット名を指定する
 * `tfvars.sample` を適当な名前でコピーし、値を設定する
 * 下記コマンドでLambdaをビルドする
 
@@ -29,7 +29,7 @@ make
 * 下記コマンドでデプロイ
 
 ```sh
-terraform init
+terraform init -backend-config backend_config/<任意>.tf
 terraform plan -var-file xxx.tfvars
 terraform apply -var-file xxx.tfvars
 ```
@@ -41,14 +41,15 @@ tfstate分離のため一部の値はremote stateで参照する
 
 ### 手順
 
-* `develop_instance/backend.tf.sample` をコピーし、検証用tfstateと参照するtfstateの値を設定する
+* `develop_instance/backend_config/sample.tf` をコピーし、検証用tfstateの値を設定する
+* `develop_instance/tfvars.sample` をコピーし、値を設定する
 * 下記コマンドでデプロイ
 
 ```sh
-# とりあえずtfvarsは流用
-terraform plan -var-file ../prd.tfvars
-terraform apply -var-file ../prd.tfvars
+terraform init -backend-config backend_config/<任意>.tf
+terraform plan -var-file xxx.tfvars
+terraform apply -var-file xxx.tfvars
 
 # AMIを変更する場合
-terraform apply -var-file ../prd.tfvars -var 'dev_ami_id=ami-xxxxxxxxxxxxxxxxx'
+terraform apply -var-file xxx.tfvars -var 'dev_ami_id=ami-xxxxxxxxxxxxxxxxx'
 ```
