@@ -29,4 +29,7 @@ override.tf.json
 # example: *tfplan*
 *.tfvars
 
+backend_config/*.tf
+!backend_config/sample.tf
+
 function_code/*.zip
