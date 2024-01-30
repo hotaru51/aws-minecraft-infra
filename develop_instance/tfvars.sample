@@ -1,0 +1,21 @@
+# デプロイ先リージョン
+region = "ap-northeast-1"
+
+# 各リソース名やNameタグのprefix
+resource_name_prefix = "xxx"
+
+# minecraftサーバのAMI
+# バックアップのAMIから起動する場合はオプション等で指定する
+# dev_ami_id = "ami-xxxxxxxxxxxxxxxxx"
+
+# minecraftサーバで使用するキーペア
+mcs_keypair = "xxx"
+
+# remote_stateの参照先bucket
+remote_state_bucket = "xxx"
+
+# remote_stateの参照先bucketのregion
+remote_state_region = "ap-northeast-1"
+
+# remote_stateのobject key
+remote_state_object_key = "xxx.tfstate"
